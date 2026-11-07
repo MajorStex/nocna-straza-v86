@@ -1,0 +1,9 @@
+{
+  "name": "nocna-straza-v86",
+  "compatibility_date": "2026-11-05",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "html_handling": "auto-trailing-slash"
+  }
+}

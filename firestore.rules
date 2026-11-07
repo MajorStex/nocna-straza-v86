@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can only read/write their own save documents; no public listing.
+    match /users/{uid}/saves/{saveId} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['key', 'value', 'deleted', 'part', 'total', 'schema', 'updatedAt'])
+        && request.resource.data.keys().hasAll(['key', 'value', 'deleted', 'part', 'total', 'schema', 'updatedAt'])
+        && request.resource.data.key is string
+        && request.resource.data.key.size() < 130
+        && request.resource.data.value is string
+        && request.resource.data.value.size() <= 570000
+        && request.resource.data.part is int
+        && request.resource.data.part >= 0
+        && request.resource.data.part <= 80
+        && request.resource.data.total is int
+        && request.resource.data.total > request.resource.data.part
+        && request.resource.data.total <= 81
+        && request.resource.data.deleted is bool
+        && request.resource.data.schema == 1
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+    // Deny everything else (future collections need explicit rules).
+    match /{document=**} { allow read, write: if false; }
+  }
+}

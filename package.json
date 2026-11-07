@@ -1,0 +1,11 @@
+{
+  "name": "nocna-straza-v86",
+  "version": "86.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.150.0"
+  }
+}
